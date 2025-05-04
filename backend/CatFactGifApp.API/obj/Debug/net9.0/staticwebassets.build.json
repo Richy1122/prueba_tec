@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "yezdd7i8ocekdUsRLNAT/qsx72bdct68FKPVCwUc9To=",
+  "Source": "CatFactGifApp.API",
+  "BasePath": "_content/CatFactGifApp.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

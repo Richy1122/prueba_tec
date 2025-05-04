@@ -1,0 +1,6 @@
+@CatFactGifApp.API_HostAddress = http://localhost:5270
+
+GET {{CatFactGifApp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
