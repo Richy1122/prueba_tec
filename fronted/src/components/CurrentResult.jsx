@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CurrentResult = () => {
   const [fact, setFact] = useState('');
@@ -7,6 +7,13 @@ const CurrentResult = () => {
   const [loadingFact, setLoadingFact] = useState(false);
   const [loadingGif, setLoadingGif] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [refreshCounter, setRefreshCounter] = useState(0); // Para forzar refresco
+
+  // Validación de 3 palabras
+  const validateQuery = (query) => {
+    const words = query.trim().split(/\s+/);
+    return words.length <= 3;
+  };
 
   // Obtener el Cat Fact con fetch
   const fetchCatFact = async () => {
@@ -19,9 +26,7 @@ const CurrentResult = () => {
         },
       });
       
-      if (!response.ok) {
-        throw new Error('Error al obtener el dato del gato');
-      }
+      if (!response.ok) throw new Error('Error al obtener el dato del gato');
       
       const data = await response.json();
       setFact(data.fact);
@@ -39,19 +44,26 @@ const CurrentResult = () => {
       alert('Ingresa una palabra clave.');
       return;
     }
+
+    if (!validateQuery(gifQuery)) {
+      alert('Por favor ingresa máximo 3 palabras.');
+      return;
+    }
   
     try {
       setLoadingGif(true);
-      const response = await fetch(`https://localhost:7270/api/catfact/gif?query=${encodeURIComponent(gifQuery.trim())}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const timestamp = Date.now();
+      const response = await fetch(
+        `https://localhost:7270/api/catfact/gif?query=${encodeURIComponent(gifQuery.trim())}&refresh=${refreshCounter}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       
-      if (!response.ok) {
-        throw new Error('Error al obtener el GIF');
-      }
+      if (!response.ok) throw new Error('Error al obtener el GIF');
       
       const data = await response.json();
       setGifUrl(data.url);
@@ -63,6 +75,11 @@ const CurrentResult = () => {
     }
   };
 
+  // Refrescar el GIF
+  const refreshGif = () => {
+    setRefreshCounter(prev => prev + 1); // Esto forzará un nuevo fetch
+  };
+
   // Función para guardar en el historial
   const handleGuardar = async () => {
     if (!fact || !gifUrl) {
@@ -72,16 +89,17 @@ const CurrentResult = () => {
 
     try {
       setSaving(true);
-      const response = await fetch(`https://localhost:7270/api/catfact/save?fact=${encodeURIComponent(fact)}&query=${encodeURIComponent(gifQuery)}&gifUrl=${encodeURIComponent(gifUrl)}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `https://localhost:7270/api/catfact/save?fact=${encodeURIComponent(fact)}&query=${encodeURIComponent(gifQuery)}&gifUrl=${encodeURIComponent(gifUrl)}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }
-      });
+      );
       
-      if (!response.ok) {
-        throw new Error('Error al guardar en el historial');
-      }
+      if (!response.ok) throw new Error('Error al guardar en el historial');
       
       const result = await response.json();
       alert('¡Datos guardados exitosamente en el historial!');
@@ -94,38 +112,18 @@ const CurrentResult = () => {
   };
 
   return (
-    <div style={{ 
-      maxWidth: '600px', 
-      margin: '20px auto', 
-      padding: '20px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-      borderRadius: '8px'
-    }}>
+    <div className="current-result-container">
       {/* 1. Botón y Cat Fact */}
       <button 
         onClick={fetchCatFact}
         disabled={loadingFact}
-        style={{ 
-          width: '100%', 
-          padding: '12px',
-          backgroundColor: loadingFact ? '#cccccc' : '#4CAF50',
-          color: 'white', 
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          marginBottom: '20px'
-        }}
+        className="cat-fact-button"
       >
         {loadingFact ? 'Cargando...' : 'Traer Cat Fact'}
       </button>
       
       {fact && (
-        <div style={{ 
-          padding: '15px', 
-          backgroundColor: '#f8f9fa',
-          borderRadius: '4px',
-          marginBottom: '20px'
-        }}>
+        <div className="cat-fact-display">
           <p><strong>Dato del gato:</strong> {fact}</p>
         </div>
       )}
@@ -134,29 +132,15 @@ const CurrentResult = () => {
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
-          placeholder="Palabra clave para el gif"
+          placeholder="Máximo 3 palabras para el gif"
           value={gifQuery}
           onChange={(e) => setGifQuery(e.target.value)}
-          style={{ 
-            width: '100%', 
-            padding: '10px',
-            borderRadius: '4px',
-            border: '1px solid #ddd'
-          }}
+          className="gif-search-input"
         />
         <button 
           onClick={fetchGif}
           disabled={loadingGif}
-          style={{ 
-            width: '100%', 
-            marginTop: '10px', 
-            padding: '12px',
-            backgroundColor: loadingGif ? '#cccccc' : '#2196F3',
-            color: 'white', 
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
+          className="gif-search-button"
         >
           {loadingGif ? 'Buscando...' : 'Generar Gif'}
         </button>
@@ -164,28 +148,15 @@ const CurrentResult = () => {
 
       {/* Visualización del GIF */}
       {gifUrl && (
-        <div style={{ marginBottom: '20px' }}>
-          <h4 style={{ marginBottom: '10px' }}>GIF Resultado:</h4>
+        <div className="gif-result-container">
+          <h4 style={{ marginBottom: '10px', color: '#d23369' }}>GIF Resultado:</h4>
           <img 
             src={gifUrl} 
             alt="GIF buscado"
-            style={{ 
-              maxWidth: '100%', 
-              height: 'auto',
-              border: '1px solid #ddd',
-              borderRadius: '4px'
-            }}
+            className="gif-image"
+            key={refreshCounter}
           />
-          <div style={{ marginTop: '10px' }}>
-            <a 
-              href={gifUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: '#2196F3' }}
-            >
-              Abrir GIF en nueva pestaña
-            </a>
-          </div>
+
         </div>
       )}
 
@@ -193,15 +164,7 @@ const CurrentResult = () => {
       <button 
         onClick={handleGuardar}
         disabled={saving || !fact || !gifUrl}
-        style={{ 
-          width: '100%', 
-          padding: '12px',
-          backgroundColor: saving ? '#cccccc' : '#FF9800',
-          color: 'white', 
-          border: 'none',
-          borderRadius: '4px',
-          cursor: saving ? 'not-allowed' : 'pointer'
-        }}
+        className="save-button"
       >
         {saving ? 'Guardando...' : 'Guardar en historial'}
       </button>

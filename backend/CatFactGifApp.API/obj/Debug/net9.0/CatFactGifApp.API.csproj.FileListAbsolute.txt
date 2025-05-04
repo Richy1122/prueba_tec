@@ -148,6 +148,7 @@ C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\CatFactGifApp.API.csproj.CoreCompileInputs.cache
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\CatFactGifApp.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\CatFactGifApp.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\CatFactGifApp.API.sourcelink.json
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\scopedcss\bundle\CatFactGifApp.API.styles.css
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\Richy\Documents\prueba_tecnica\backend\CatFactGifApp.API\obj\Debug\net9.0\staticwebassets.development.json

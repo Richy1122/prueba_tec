@@ -5,6 +5,6 @@ public interface IHistoryService
 {
     Task SaveSearch(string fact, string query, string gifUrl);
     Task<List<SearchHistory>> GetSearchHistory();
-     Task<List<SearchHistory>> GetAllRecords();     // Nuevo método
+     Task<List<SearchHistory>> GetAllRecords();     
     
 }

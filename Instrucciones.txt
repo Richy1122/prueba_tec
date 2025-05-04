@@ -1,0 +1,41 @@
+Prueba tecnica de conocimientos
+Autor: Richard Vega
+
+REQUISITOS DE EJECUCION
+
+ - Instalar los siguientes programas y/o programas
+   NET 9.0 SDK o superior 
+   Node.js 
+   SQL Server Express
+   GitBash
+   Visual Studio Code
+
+INSTRUCCIONES DE EJECUCION
+
+ - clonar el repositorio a una carpeta de su equipo o descargue el archivo .zip del siguiente enlace
+  	ruta: https://github.com/Richy1122/prueba_tec
+
+ - Crear una tabla de nombre CatFactGifDB en SQL Server Express
+
+ - Actualizar la cadena de conexion en tu equipo local con tu contraseña y servicio en appsettings.json en "ConnetionStrings"
+	ruta: prueba_tecnica/backend/CatfactGifApp.API/appsettings.json
+ 
+ - Ejecutar los siguentes comandos dentro de la ruta mencionada en el terminal BACKEND:
+	ruta: ../prueba_tecnica/backend/CatFactGifApp.API
+		dotnet add package Swashbuckle.AspNetCore
+         	dotnet restore 
+	        dotnet ef database update
+		dotnet clean
+	        dotnet build
+        	dotnet run
+
+- Ejecutar los siguentes comandos dentro de la ruta mencionada en el terminal FRONTED:
+	ruta: ../prueba_tecnica/fronted
+		npm install
+		npm start
+
+NOTA 1: Mantener activo los dos terminales simultaneamente
+NOTA 2: Para terminar el proceso agregre CTRL + C p
+
+- Video del funcionamiento
+  https://youtu.be/Nd9uM4nfufA
